@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>თერჯოლის მუნიციპალიტეტის საკრებულო - კენჭისყრა</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 1. საწყისი ეკრანი -->
+    <div id="screen-home" class="panel active">
+        <div class="brand-container">
+            <div class="terjola-emblem">🏛️</div>
+            <h1>თერჯოლის მუნიციპალიტეტის საკრებულო</h1>
+            <p class="subtitle">ელექტრონული კენჭისყრისა და სხდომების მართვის სისტემა</p>
+        </div>
+        <div class="role-buttons">
+            <button class="btn btn-admin" onclick="showLogin('admin')">🏛️ საკრებულოს თავმჯდომარე</button>
+            <button class="btn btn-deputy" onclick="showLogin('deputy')">👤 საკრებულოს წევრი</button>
+            <button class="btn btn-public" onclick="showPublicScreen()">📺 საჯარო ეკრანი (ტაბლო)</button>
+        </div>
+    </div>
+
+    <!-- 2. ავტორიზაციის ეკრანი -->
+    <div id="screen-login" class="panel">
+        <h2 id="loginTitle">ავტორიზაცია</h2>
+        <input type="password" id="passwordInput" placeholder="შეიყვანეთ კოდი..." onkeypress="handleEnter(event)">
+        <div class="login-actions">
+            <button class="btn btn-add" onclick="login()">შესვლა</button>
+            <button class="btn btn-back" onclick="showHome()">უკან</button>
+        </div>
+    </div>
+
+    <!-- 3. თავმჯდომარის (ადმინის) პანელი -->
+    <div id="screen-admin" class="panel">
+        <div class="admin-header">
+            <h2>📋 დღის წესრიგი და მართვის პანელი</h2>
+            <button class="btn btn-back" onclick="logout()">გამოსვლა</button>
+        </div>
+        
+        <!-- ახალი, დახვეწილი ატვირთვის ფორმა -->
+        <div class="upload-form">
+            <input type="text" id="issueTitle" placeholder="📝 საკითხის სათაური (მაგ: ბიუჯეტის დამტკიცება)...">
+            <input type="text" id="issueSpeaker" placeholder="👤 მომხსენებელი (მაგ: გიორგი გიორგაძე)...">
+            <div class="file-upload-row">
+                <input type="file" id="issueFile" accept="application/pdf">
+                <button class="btn btn-add" onclick="uploadAndSave()" id="uploadBtn">⬆️ ატვირთვა და დამატება</button>
+            </div>
+        </div>
+        
+        <div id="issuesList"></div>
+    </div>
+
+    <!-- 4. საჯარო ეკრანი (პროექტორისთვის) -->
+    <div id="screen-public" class="panel">
+        <div class="public-top-bar">
+            <h2>🔴 თერჯოლის საკრებულო — პირდაპირი ტაბლო</h2>
+            <button class="btn btn-back" style="padding: 5px 15px; font-size: 14px;" onclick="showHome()">მთავარი</button>
+        </div>
+        
+        <div id="publicWaiting" class="public-waiting">
+            <h2>⏳ მოლოდინის რეჟიმი</h2>
+            <p>სხდომის თავმჯდომარე მალე გამოიტანს საკითხს კენჭისყრაზე...</p>
+        </div>
+
+        <div id="publicContent" class="public-content" style="display: none;">
+            <h1 id="publicIssueTitle" class="pub-title">საკითხის სათაური</h1>
+            <div id="publicSpeaker" class="pub-speaker">მომხსენებელი: -</div>
+            
+            <div class="live-stats public-stats" id="publicStats">
+                <!-- ლაივ ხმების კვადრატები პროექტორისთვის -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. დეპუტატის (პლანშეტის) პანელი -->
+    <div id="screen-deputy" class="panel">
+        <div class="deputy-header">
+            <span id="deputyName">დეპუტატი</span>
+            <button class="btn btn-back" style="padding: 5px 15px; font-size: 14px;" onclick="logout()">გამოსვლა</button>
+        </div>
+        
+        <div id="waiting">⏳ დაელოდეთ, მიმდინარეობს სხდომა...</div>
+
+        <div id="votingSection">
+            <div class="header">
+                <h2 id="voteIssueTitle" style="margin:0;">სათაური</h2>
+                <div id="voteSpeaker" style="color: #666; font-size: 14px; margin-top: 5px;">მომხსენებელი: -</div>
+            </div>
+            <div class="document-container">
+                <iframe id="pdfFrame" src=""></iframe>
+            </div>
+            <div class="actions" id="actionButtons">
+                <button class="btn btn-yes" onclick="vote('yes')" id="btnYes">მომხრე</button>
+                <button class="btn btn-no" onclick="vote('no')" id="btnNo">წინააღმდეგი</button>
+                <button class="btn btn-abs" onclick="vote('abstain')" id="btnAbs">თავი შეიკავა</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
